@@ -34,18 +34,13 @@ export function Header() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-colors duration-500",
-          scrolled ? "bg-abyss/85 backdrop-blur-xl" : "bg-transparent"
+          "safe-top fixed top-0 left-0 right-0 z-50 transition-colors duration-500",
+          scrolled || drawerOpen ? "bg-abyss/90 backdrop-blur-xl" : "bg-transparent"
         )}
       >
-        {/*
-          Three equal-height tracks keep logo, nav and actions on one baseline.
-          The middle track is allowed to shrink so long labels never shove the
-          phone / CTA out of vertical alignment.
-        */}
-        <div className="mx-auto grid h-[74px] max-w-[1440px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-6 lg:gap-6 lg:px-10">
-          <a href="#home" aria-label="Точка Зрения — на главную" className="shrink-0">
-            <Logo />
+        <div className="mx-auto grid h-16 max-w-[1440px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 sm:h-[74px] sm:gap-4 sm:px-6 lg:px-10 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:gap-6">
+          <a href="#home" aria-label="Точка Зрения — на главную" className="min-w-0 shrink">
+            <Logo compact />
           </a>
 
           <nav className="hidden min-w-0 items-center justify-center gap-x-3 overflow-hidden 2xl:gap-x-4 xl:flex">
@@ -60,7 +55,14 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="relative z-10 flex h-full shrink-0 items-center justify-end gap-3 sm:gap-4">
+          <div className="relative z-10 flex h-full shrink-0 items-center justify-end gap-2 sm:gap-3">
+            <a
+              href={contact.phoneHref}
+              aria-label={`Позвонить ${contact.phone}`}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-small text-aqua transition-colors hover:bg-white/5 lg:hidden"
+            >
+              <Phone className="h-4 w-4" strokeWidth={1.75} />
+            </a>
             <a
               href={contact.phoneHref}
               className="hidden h-10 items-center gap-2 leading-none text-[13px] tracking-[0.04em] text-silver transition-colors hover:text-platinum lg:inline-flex"
@@ -105,14 +107,14 @@ export function Header() {
               onClick={() => setDrawerOpen(false)}
             />
             <motion.div
-              className="absolute right-0 top-0 flex h-full w-[88%] max-w-sm flex-col bg-deep"
+              className="safe-top absolute right-0 top-0 flex h-full w-full max-w-[22rem] flex-col bg-deep"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 280 }}
             >
-              <div className="flex h-[74px] items-center justify-between border-b border-white/10 px-6">
-                <Logo />
+              <div className="flex h-16 items-center justify-between border-b border-white/10 px-5 sm:h-[74px] sm:px-6">
+                <Logo compact />
                 <button
                   onClick={() => setDrawerOpen(false)}
                   aria-label="Закрыть меню"
@@ -122,7 +124,7 @@ export function Header() {
                 </button>
               </div>
 
-              <nav className="flex flex-col gap-1 overflow-y-auto p-6">
+              <nav className="flex flex-1 flex-col gap-1 overflow-y-auto overscroll-contain p-5 sm:p-6">
                 {navLinks.map((link, i) => (
                   <motion.a
                     key={link.href}
@@ -131,18 +133,18 @@ export function Header() {
                     initial={{ opacity: 0, x: 24 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.04 * i, duration: 0.4 }}
-                    className="flex items-center justify-between border-b border-white/5 py-4 text-[15px] text-mist transition-colors hover:text-aqua"
+                    className="flex min-h-12 items-center justify-between border-b border-white/5 py-3.5 text-[15px] text-mist transition-colors hover:text-aqua"
                   >
                     {link.label}
-                    <ArrowUpRight className="h-4 w-4 text-slate-deep" />
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-slate-deep" />
                   </motion.a>
                 ))}
               </nav>
 
-              <div className="mt-auto flex flex-col gap-4 border-t border-white/10 p-6">
+              <div className="safe-bottom mt-auto flex flex-col gap-4 border-t border-white/10 p-5 sm:p-6">
                 <a
                   href={contact.phoneHref}
-                  className="inline-flex h-10 items-center gap-2 leading-none text-platinum"
+                  className="inline-flex h-11 items-center gap-2 leading-none text-platinum"
                 >
                   <Phone className="h-4 w-4 text-aqua" /> {contact.phone}
                 </a>

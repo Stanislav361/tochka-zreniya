@@ -19,7 +19,7 @@ export function FloatingCTAs() {
   }, []);
 
   return (
-    <div className="fixed bottom-5 right-5 z-[100] flex flex-col items-end gap-2.5">
+    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-[100] flex flex-col items-end gap-2.5 sm:bottom-[max(1.25rem,env(safe-area-inset-bottom))] sm:right-[max(1.25rem,env(safe-area-inset-right))]">
       <AnimatePresence>
         {open && visible && (
           <motion.div

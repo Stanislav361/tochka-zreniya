@@ -40,13 +40,13 @@ function ServiceRow({ service }: { service: Service }) {
   const { openBooking } = useBooking();
 
   return (
-    <div className="group flex items-start justify-between gap-5 border-t border-white/[0.06] px-5 py-5 sm:px-6">
+    <div className="group flex flex-col gap-4 border-t border-white/[0.06] px-4 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-5 sm:px-6 sm:py-5">
       <div className="min-w-0">
         <div className="flex items-center gap-3">
           <span className="u-label-sm text-slate-deep">{service.code}</span>
           <span className="h-px w-6 bg-white/10" />
         </div>
-        <h4 className="mt-2 text-[15px] font-medium leading-snug text-platinum">
+        <h4 className="mt-2 text-[14px] font-medium leading-snug text-platinum sm:text-[15px]">
           {service.name}
         </h4>
         <p className="mt-2 text-[13px] leading-[1.55] text-silver/80">
@@ -54,14 +54,14 @@ function ServiceRow({ service }: { service: Service }) {
         </p>
       </div>
 
-      <div className="flex shrink-0 flex-col items-end gap-3">
-        <span className="whitespace-nowrap text-[18px] font-medium tracking-[-0.02em] text-phosphor">
+      <div className="flex shrink-0 items-center justify-between gap-3 sm:flex-col sm:items-end">
+        <span className="whitespace-nowrap text-[17px] font-medium tracking-[-0.02em] text-phosphor sm:text-[18px]">
           {formatPrice(service.price, service.priceFrom)}
         </span>
         <button
           onClick={() => openBooking({ serviceCode: service.code })}
           aria-label={`Записаться: ${service.name}`}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-small bg-[rgba(3,81,75,0.5)] text-platinum transition-all duration-500 hover:bg-aqua hover:text-abyss"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-small bg-[rgba(3,81,75,0.5)] text-platinum transition-all duration-500 hover:bg-aqua hover:text-abyss sm:h-8 sm:w-8"
         >
           <ArrowUpRight className="h-4 w-4" strokeWidth={1.6} />
         </button>
@@ -117,13 +117,13 @@ export function PriceCatalog() {
   };
 
   return (
-    <section id="prices" className="relative overflow-hidden bg-deep py-20 sm:py-28">
+    <section id="prices" className="relative overflow-hidden bg-deep py-16 sm:py-28">
       <div className="glow-pool left-[-8%] top-[55%] h-[380px] w-[480px] opacity-70" />
 
-      <div className="relative mx-auto max-w-[1440px] px-6 lg:px-10">
+      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-6 lg:px-10">
         <AnimatedSection className="mx-auto max-w-2xl text-center">
           <p className="u-label text-mist/70">Прайс-лист</p>
-          <h2 className="display-tight mt-4 text-[2rem] text-platinum sm:text-[2.4rem]">
+          <h2 className="display-tight mt-4 text-[1.75rem] text-platinum sm:text-[2.4rem]">
             Услуги и цены
           </h2>
           <p className="mt-5 text-[15px] leading-[1.6] text-silver">
@@ -138,7 +138,7 @@ export function PriceCatalog() {
               <button
                 key={pkg.code}
                 onClick={() => openBooking({ serviceCode: pkg.code })}
-                className="group flex flex-col rounded-cards bg-kelp/50 p-7 text-left transition-colors duration-500 hover:bg-kelp"
+                className="group flex flex-col rounded-cards bg-kelp/50 p-5 text-left transition-colors duration-500 hover:bg-kelp sm:p-7"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -171,7 +171,7 @@ export function PriceCatalog() {
               value={query}
               onChange={(e) => setQueryAndReveal(e.target.value)}
               placeholder="Поиск по названию или коду услуги"
-              className="w-full rounded-small border border-white/10 bg-white/[0.03] py-3.5 pl-11 pr-11 text-[14px] text-mist outline-none transition-colors placeholder:text-slate-deep focus:border-aqua/40 focus:bg-white/[0.06]"
+              className="w-full rounded-small border border-white/10 bg-white/[0.03] py-3.5 pl-11 pr-11 text-[16px] text-mist outline-none transition-colors placeholder:text-slate-deep focus:border-aqua/40 focus:bg-white/[0.06] sm:text-[14px]"
             />
             {query && (
               <button
@@ -228,7 +228,7 @@ export function PriceCatalog() {
                   aria-expanded={isOpen}
                   aria-controls={panelId}
                   onClick={() => toggleCategory(tab)}
-                  className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left transition-colors duration-300 hover:bg-white/[0.03] sm:px-6"
+                  className="flex w-full items-center justify-between gap-3 px-4 py-4 text-left transition-colors duration-300 hover:bg-white/[0.03] sm:gap-4 sm:px-6 sm:py-5"
                 >
                   <div className="min-w-0">
                     <span className="block text-[15px] font-medium leading-snug text-platinum sm:text-[16px]">

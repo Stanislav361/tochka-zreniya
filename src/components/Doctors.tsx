@@ -67,10 +67,10 @@ export function Doctors() {
     <section id="doctors" className="relative overflow-hidden py-20 sm:py-28">
       <div className="glow-pool left-[45%] top-[8%] h-[360px] w-[520px]" />
 
-      <div className="relative mx-auto max-w-[1440px] px-6 lg:px-10">
+      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-6 lg:px-10">
         <AnimatedSection className="mx-auto max-w-2xl text-center">
           <p className="u-label text-mist/70">Команда</p>
-          <h2 className="display-tight mt-4 text-[2rem] text-platinum sm:text-[2.4rem]">
+          <h2 className="display-tight mt-4 text-[1.75rem] text-platinum sm:text-[2.4rem]">
             Врачи центра
           </h2>
           <p className="mt-5 text-[15px] leading-[1.6] text-silver">
@@ -81,7 +81,7 @@ export function Doctors() {
 
         {/* chief physician */}
         <AnimatedSection delay={0.1} className="mt-14">
-          <div className="relative overflow-hidden rounded-cards bg-kelp p-8 sm:p-10 lg:p-12">
+          <div className="relative overflow-hidden rounded-cards bg-kelp p-6 sm:p-10 lg:p-12">
             <div
               className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full opacity-60"
               style={{
@@ -96,7 +96,7 @@ export function Doctors() {
 
               <div className="flex-1">
                 <p className="u-label-sm text-aqua">Главный врач</p>
-                <h3 className="display-tight mt-3 text-[1.7rem] text-platinum sm:text-[2.1rem]">
+                <h3 className="display-tight mt-3 text-[1.45rem] leading-tight text-platinum sm:text-[2.1rem] sm:leading-none">
                   {chief.name}
                 </h3>
                 <p className="mt-3 text-[15px] text-mist/80">{chief.specialty}</p>
@@ -120,7 +120,7 @@ export function Doctors() {
 
                 <button
                   onClick={() => openBooking({ doctorSlug: chief.slug })}
-                  className="btn-aurora mt-8 inline-flex items-center gap-2 px-6 py-3.5 font-medium"
+                  className="btn-aurora mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 px-6 py-3.5 font-medium sm:w-auto"
                 >
                   Записаться к главному врачу
                   <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
@@ -142,7 +142,7 @@ export function Doctors() {
             <motion.div
               key={doctor.slug}
               variants={staggerItem}
-              className="group flex flex-col rounded-cards bg-kelp/40 p-7 transition-colors duration-500 hover:bg-kelp/70"
+              className="group flex flex-col rounded-cards bg-kelp/40 p-5 transition-colors duration-500 hover:bg-kelp/70 sm:p-7"
             >
               <div className="flex items-start gap-4">
                 <DoctorAvatar doctor={doctor} />

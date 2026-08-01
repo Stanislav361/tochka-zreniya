@@ -12,17 +12,17 @@ export function ContactSection() {
     <section id="contacts" className="relative overflow-hidden py-20 sm:py-28">
       <div className="glow-pool right-[10%] top-[0%] h-[380px] w-[520px] opacity-60" />
 
-      <div className="relative mx-auto max-w-[1440px] px-6 lg:px-10">
+      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-6 lg:px-10">
         <AnimatedSection className="mx-auto max-w-2xl text-center">
           <p className="u-label text-mist/70">Контакты</p>
-          <h2 className="display-tight mt-4 text-[2rem] text-platinum sm:text-[2.4rem]">
+          <h2 className="display-tight mt-4 text-[1.75rem] text-platinum sm:text-[2.4rem]">
             Как нас найти
           </h2>
         </AnimatedSection>
 
-        <div className="mt-14 grid gap-3 lg:grid-cols-5">
+        <div className="mt-10 grid gap-3 sm:mt-14 lg:grid-cols-5">
           <AnimatedSection delay={0.08} className="lg:col-span-2">
-            <div className="flex h-full flex-col rounded-cards bg-kelp p-8 sm:p-10">
+            <div className="flex h-full flex-col rounded-cards bg-kelp p-6 sm:p-10">
               <div className="flex flex-col gap-8">
                 <div>
                   <div className="flex items-center gap-2.5">
@@ -69,7 +69,7 @@ export function ContactSection() {
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <button
                   onClick={() => openBooking()}
-                  className="btn-aurora inline-flex flex-1 items-center justify-center gap-2 px-6 py-3.5 font-medium"
+                  className="btn-aurora inline-flex min-h-12 flex-1 items-center justify-center gap-2 px-6 py-3.5 font-medium"
                 >
                   Записаться
                   <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
@@ -78,7 +78,7 @@ export function ContactSection() {
                   href={contact.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex flex-1 items-center justify-center rounded-small border border-white/15 px-6 py-3.5 text-[13px] uppercase tracking-[0.08em] text-mist transition-colors duration-500 hover:border-aqua/40 hover:text-aqua"
+                  className="inline-flex min-h-12 flex-1 items-center justify-center rounded-small border border-white/15 px-6 py-3.5 text-[13px] uppercase tracking-[0.08em] text-mist transition-colors duration-500 hover:border-aqua/40 hover:text-aqua"
                 >
                   WhatsApp
                 </a>
@@ -87,13 +87,15 @@ export function ContactSection() {
           </AnimatedSection>
 
           <AnimatedSection delay={0.15} className="lg:col-span-3">
-            <div className="h-full min-h-[420px] overflow-hidden rounded-cards border border-white/[0.07]">
+            <div className="h-full min-h-[280px] overflow-hidden rounded-cards border border-white/[0.07] sm:min-h-[420px]">
               <iframe
                 src={contact.mapEmbedUrl}
                 width="100%"
                 height="100%"
-                style={{ minHeight: 420, border: 0, filter: "grayscale(0.35) contrast(1.05)" }}
+                style={{ minHeight: 280, border: 0, filter: "grayscale(0.35) contrast(1.05)" }}
+                className="min-h-[280px] sm:min-h-[420px]"
                 loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
                 title="Карта проезда к медицинскому центру «Точка Зрения»"
               />
             </div>

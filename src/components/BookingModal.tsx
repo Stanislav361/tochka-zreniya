@@ -36,7 +36,7 @@ export function BookingModal() {
           />
 
           <motion.div
-            className="relative flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-cards bg-deep sm:max-w-lg sm:rounded-cards"
+            className="safe-bottom relative flex max-h-[min(92vh,100dvh)] w-full flex-col overflow-hidden rounded-t-cards bg-deep sm:max-w-lg sm:rounded-cards"
             initial={{ y: 48, opacity: 0, scale: 0.99 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 32, opacity: 0, scale: 0.99 }}
@@ -51,23 +51,23 @@ export function BookingModal() {
               }}
             />
 
-            <div className="relative flex items-start justify-between border-b border-white/10 px-7 pb-5 pt-7 sm:px-9">
-              <div>
+            <div className="relative flex items-start justify-between border-b border-white/10 px-5 pb-5 pt-6 sm:px-9 sm:pt-7">
+              <div className="min-w-0 pr-3">
                 <p className="u-label-sm text-aqua">Онлайн-запись</p>
-                <h3 className="display-tight mt-2 text-[1.5rem] text-platinum">
+                <h3 className="display-tight mt-2 text-[1.35rem] leading-tight text-platinum sm:text-[1.5rem] sm:leading-none">
                   Записаться на приём
                 </h3>
               </div>
               <button
                 onClick={closeBooking}
                 aria-label="Закрыть"
-                className="flex h-9 w-9 items-center justify-center rounded-small text-slate-deep transition-colors hover:bg-white/5 hover:text-mist"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-small text-slate-deep transition-colors hover:bg-white/5 hover:text-mist"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="relative overflow-y-auto px-7 py-7 sm:px-9">
+            <div className="relative overflow-y-auto overscroll-contain px-5 py-6 sm:px-9 sm:py-7">
               <BookingForm
                 key={`${prefill.doctorSlug ?? ""}::${prefill.serviceCode ?? ""}`}
                 prefill={prefill}
@@ -242,4 +242,4 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 const controlClasses =
-  "w-full rounded-small border border-white/10 bg-white/[0.03] px-4 py-3.5 text-[14px] text-mist outline-none transition-colors placeholder:text-slate-deep focus:border-aqua/40 focus:bg-white/[0.06] [&>option]:bg-deep [&>option]:text-mist";
+  "w-full rounded-small border border-white/10 bg-white/[0.03] px-4 py-3.5 text-[16px] text-mist outline-none transition-colors placeholder:text-slate-deep focus:border-aqua/40 focus:bg-white/[0.06] sm:text-[14px] [&>option]:bg-deep [&>option]:text-mist";

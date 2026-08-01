@@ -18,11 +18,11 @@ export function HardwareModule() {
     <section id="hardware" className="relative overflow-hidden py-20 sm:py-28">
       <div className="glow-pool right-[-6%] top-[20%] h-[420px] w-[520px]" />
 
-      <div className="relative mx-auto max-w-[1440px] px-6 lg:px-10">
-        <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-6 lg:px-10">
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
           <AnimatedSection>
             <p className="u-label text-mist/70">Аппаратное лечение</p>
-            <h2 className="display-tight mt-4 text-[2rem] text-platinum sm:text-[2.4rem]">
+            <h2 className="display-tight mt-4 text-[1.75rem] text-platinum sm:text-[2.4rem]">
               Восстановление зрения
               <br />
               без операции
@@ -43,7 +43,7 @@ export function HardwareModule() {
 
             <button
               onClick={() => openBooking({ serviceCode: "1.51" })}
-              className="btn-aurora mt-8 inline-flex items-center gap-2 px-6 py-3.5 font-medium"
+              className="btn-aurora mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 px-6 py-3.5 font-medium sm:w-auto"
             >
               Записаться на курс
               <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
@@ -62,19 +62,19 @@ export function HardwareModule() {
                 <motion.div
                   key={program.key}
                   variants={staggerItem}
-                  className="group rounded-cards bg-kelp/40 p-7 transition-colors duration-500 hover:bg-kelp"
+                  className="group rounded-cards bg-kelp/40 p-5 transition-colors duration-500 hover:bg-kelp sm:p-7"
                 >
-                  <div className="flex items-start justify-between gap-6">
-                    <div>
-                      <h3 className="text-[20px] font-medium tracking-[-0.02em] text-platinum">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+                    <div className="min-w-0">
+                      <h3 className="text-[18px] font-medium tracking-[-0.02em] text-platinum sm:text-[20px]">
                         {program.name}
                       </h3>
                       <p className="mt-2.5 max-w-md text-[14px] leading-[1.55] text-silver">
                         {program.description}
                       </p>
                     </div>
-                    <div className="shrink-0 text-right">
-                      <p className="text-[26px] font-medium leading-none tracking-[-0.03em] text-phosphor">
+                    <div className="shrink-0 sm:text-right">
+                      <p className="text-[24px] font-medium leading-none tracking-[-0.03em] text-phosphor sm:text-[26px]">
                         {formatPrice(program.price)}
                       </p>
                       <p className="u-label-sm mt-2 text-slate-deep">
@@ -95,18 +95,18 @@ export function HardwareModule() {
             </motion.div>
 
             {/* single-session ledger straight from the price list */}
-            <AnimatedSection delay={0.1} className="mt-3 rounded-cards bg-white/[0.02] p-7">
+            <AnimatedSection delay={0.1} className="mt-3 rounded-cards bg-white/[0.02] p-5 sm:p-7">
               <p className="u-label-sm text-slate-deep">Разовые сеансы</p>
               <div className="mt-5 flex flex-col">
                 {singleSessions.map((s) => (
                   <div
                     key={s.code}
-                    className="flex items-center justify-between gap-4 border-t border-white/[0.06] py-3 first:border-t-0 first:pt-0"
+                    className="flex items-start justify-between gap-3 border-t border-white/[0.06] py-3 first:border-t-0 first:pt-0 sm:items-center sm:gap-4"
                   >
-                    <span className="text-[14px] leading-snug text-silver">
+                    <span className="min-w-0 text-[14px] leading-snug text-silver">
                       {s.name.replace(" (1 сеанс)", "")}
                     </span>
-                    <span className="whitespace-nowrap text-[15px] font-medium text-mist">
+                    <span className="shrink-0 whitespace-nowrap text-[15px] font-medium text-mist">
                       {formatPrice(s.price)}
                     </span>
                   </div>

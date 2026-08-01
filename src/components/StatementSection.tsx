@@ -21,9 +21,9 @@ export function StatementSection({
         : "left-1/2 -translate-x-1/2";
 
   return (
-    <section className="relative overflow-hidden py-28 sm:py-36">
+    <section className="relative overflow-hidden py-20 sm:py-36">
       <div className={`glow-pool bottom-[-12%] h-[420px] w-[560px] ${glowPosition}`} />
-      <div className="relative mx-auto max-w-5xl px-6">
+      <div className="relative mx-auto max-w-5xl px-5 sm:px-6">
         <ScrollRevealText>{children}</ScrollRevealText>
       </div>
     </section>

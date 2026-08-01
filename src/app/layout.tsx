@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -8,6 +8,13 @@ const matter = Inter({
   subsets: ["latin", "cyrillic"],
   weight: ["400", "500"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#012624",
+};
 
 export const metadata: Metadata = {
   title: "Точка Зрения — Медицинский центр и Оптика",
@@ -23,6 +30,11 @@ export const metadata: Metadata = {
     "контактные линзы",
     "аппаратное лечение зрения",
   ],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Точка Зрения",
+  },
 };
 
 export default function RootLayout({

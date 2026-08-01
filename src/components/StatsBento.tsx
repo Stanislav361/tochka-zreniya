@@ -35,10 +35,10 @@ export function StatsBento() {
     <section id="stats" className="relative overflow-hidden py-20 sm:py-28">
       <div className="glow-pool right-[-5%] top-[10%] h-[400px] w-[500px]" />
 
-      <div className="relative mx-auto max-w-[1440px] px-6 lg:px-10">
+      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-6 lg:px-10">
         <AnimatedSection className="mx-auto max-w-2xl text-center">
           <p className="u-label text-mist/70">Цифры</p>
-          <h2 className="display-tight mt-4 text-[2rem] text-platinum sm:text-[2.4rem]">
+          <h2 className="display-tight mt-4 text-[1.75rem] text-platinum sm:text-[2.4rem]">
             «Точка Зрения» в цифрах
           </h2>
           <p className="mt-5 text-[15px] leading-[1.6] text-silver">
@@ -56,10 +56,10 @@ export function StatsBento() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className={cn(
-                "flex flex-col justify-between rounded-cards p-8 sm:p-9",
+                "flex flex-col justify-between rounded-cards p-6 sm:p-9",
                 stat.featured
-                  ? "min-h-[280px] text-abyss lg:row-span-2 lg:min-h-[420px]"
-                  : "min-h-[200px] bg-kelp",
+                  ? "min-h-[220px] text-abyss sm:min-h-[280px] lg:row-span-2 lg:min-h-[420px]"
+                  : "min-h-[160px] bg-kelp sm:min-h-[200px]",
                 i === 1 && "lg:col-span-3"
               )}
               style={
@@ -73,7 +73,7 @@ export function StatsBento() {
             >
               <p
                 className={cn(
-                  "u-label-sm max-w-[14ch] leading-relaxed",
+                  "u-label-sm max-w-[16ch] leading-relaxed",
                   stat.featured ? "text-abyss/70" : "text-mist/80"
                 )}
               >
@@ -81,7 +81,7 @@ export function StatsBento() {
               </p>
               <p
                 className={cn(
-                  "kinetic mt-10 text-[3.4rem] sm:text-[4.2rem]",
+                  "kinetic mt-8 text-[2.8rem] sm:mt-10 sm:text-[4.2rem]",
                   stat.featured ? "text-abyss" : "text-phosphor"
                 )}
               >

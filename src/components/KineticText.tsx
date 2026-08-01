@@ -25,12 +25,12 @@ export function KineticText({
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.35, 1, 1, 0.35]);
 
   return (
-    <div ref={ref} className="relative overflow-hidden py-20 sm:py-28">
+    <div ref={ref} className="relative overflow-hidden py-14 sm:py-28">
       <div className="glow-pool left-[10%] top-1/3 h-[380px] w-[520px]" />
-      <motion.div style={{ opacity }} className="relative flex flex-col gap-2">
+      <motion.div style={{ opacity }} className="relative flex flex-col gap-1 sm:gap-2">
         <motion.div
           style={{ x: xOne }}
-          className="kinetic whitespace-nowrap text-[19vw] leading-[0.86] text-transparent bg-clip-text"
+          className="kinetic whitespace-nowrap text-[22vw] leading-[0.86] text-transparent bg-clip-text sm:text-[19vw]"
         >
           <span
             className="bg-clip-text text-transparent"
@@ -45,7 +45,7 @@ export function KineticText({
         </motion.div>
         <motion.div
           style={{ x: xTwo }}
-          className="kinetic whitespace-nowrap text-[19vw] leading-[0.86]"
+          className="kinetic whitespace-nowrap text-[22vw] leading-[0.86] sm:text-[19vw]"
         >
           <span
             className="bg-clip-text text-transparent"

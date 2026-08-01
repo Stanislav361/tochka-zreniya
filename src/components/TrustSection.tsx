@@ -10,16 +10,16 @@ export function TrustSection() {
     <section id="trust" className="relative overflow-hidden py-20 sm:py-28">
       <div className="glow-pool left-[-4%] top-[30%] h-[360px] w-[420px] opacity-70" />
 
-      <div className="relative mx-auto max-w-[1440px] px-6 lg:px-10">
+      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-6 lg:px-10">
         <AnimatedSection className="mx-auto max-w-2xl text-center">
           <p className="u-label text-mist/70">Доверие</p>
-          <h2 className="display-tight mt-4 text-[2rem] text-platinum sm:text-[2.4rem]">
+          <h2 className="display-tight mt-4 text-[1.75rem] text-platinum sm:text-[2.4rem]">
             Что говорят пациенты
           </h2>
         </AnimatedSection>
 
-        <div className="mt-14 rounded-cards bg-deep">
-          <div className="grid gap-10 p-8 sm:p-12 lg:grid-cols-3 lg:gap-6">
+        <div className="mt-10 rounded-cards bg-deep sm:mt-14">
+          <div className="grid gap-8 p-6 sm:gap-10 sm:p-12 lg:grid-cols-3 lg:gap-6">
             {testimonials.map((item, i) => (
               <motion.div
                 key={item.source}
@@ -39,10 +39,10 @@ export function TrustSection() {
           </div>
 
           {/* rating + platforms */}
-          <div className="grid gap-8 border-t border-white/10 p-8 sm:p-12 lg:grid-cols-2 lg:items-center">
+          <div className="grid gap-8 border-t border-white/10 p-6 sm:p-12 lg:grid-cols-2 lg:items-center">
             <div>
               <div className="flex items-center gap-4">
-                <span className="kinetic text-[3rem] text-phosphor">
+                <span className="kinetic text-[2.6rem] text-phosphor sm:text-[3rem]">
                   {contact.rating.value.toFixed(1)}
                 </span>
                 <div>
@@ -106,12 +106,12 @@ export function TrustSection() {
       </div>
 
       {/* methods marquee — equipment and diagnostics from the price list */}
-      <div className="marquee-mask relative mt-16 overflow-hidden border-y border-white/[0.07] py-7">
-        <div className="animate-marquee flex w-max items-center gap-14">
+      <div className="marquee-mask relative mt-12 overflow-hidden border-y border-white/[0.07] py-5 sm:mt-16 sm:py-7">
+        <div className="animate-marquee flex w-max items-center gap-8 sm:gap-14">
           {[...methodMarquee, ...methodMarquee].map((method, i) => (
             <span
               key={`${method}-${i}`}
-              className="u-label whitespace-nowrap text-silver/70"
+              className="u-label whitespace-nowrap text-[11px] text-silver/70 sm:text-[12px]"
             >
               {method}
             </span>

@@ -46,19 +46,32 @@ export function LogoMark({ className }: { className?: string }) {
 export function Logo({
   className,
   showDescriptor = true,
+  compact = false,
 }: {
   className?: string;
   showDescriptor?: boolean;
+  /** tighter mark + type for the mobile header */
+  compact?: boolean;
 }) {
   return (
-    <div className={cn("flex items-center gap-2.5 text-platinum", className)}>
-      <LogoMark className="h-8 w-8 shrink-0" />
-      <div className="flex flex-col leading-none">
-        <span className="text-[15px] font-medium tracking-[0.06em] whitespace-nowrap">
+    <div className={cn("flex items-center gap-2 text-platinum sm:gap-2.5", className)}>
+      <LogoMark className={cn("shrink-0", compact ? "h-7 w-7" : "h-8 w-8")} />
+      <div className="flex min-w-0 flex-col leading-none">
+        <span
+          className={cn(
+            "font-medium tracking-[0.06em] whitespace-nowrap",
+            compact ? "text-[13px]" : "text-[15px]"
+          )}
+        >
           ТОЧКА ЗРЕНИЯ
         </span>
         {showDescriptor && (
-          <span className="u-label-sm mt-1 text-aqua/70 whitespace-nowrap">
+          <span
+            className={cn(
+              "u-label-sm mt-1 text-aqua/70 whitespace-nowrap",
+              compact && "hidden min-[380px]:block"
+            )}
+          >
             МЕДЦЕНТР&nbsp;&nbsp;|&nbsp;&nbsp;ОПТИКА
           </span>
         )}

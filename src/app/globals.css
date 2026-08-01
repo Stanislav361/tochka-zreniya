@@ -47,6 +47,10 @@
 html {
   scroll-behavior: smooth;
   background: var(--color-abyss);
+  /* keep decorative glow pools / marquees from creating page-level scroll */
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -55,7 +59,17 @@ body {
   font-family: var(--font-matter), ui-sans-serif, system-ui, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-x: none;
+}
+
+/* phone notches / home indicator */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 ::selection {

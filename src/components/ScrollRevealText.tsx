@@ -28,7 +28,7 @@ export function ScrollRevealText({
       ref={ref}
       style={{ ["--reveal" as string]: reveal }}
       className={cn(
-        "kinetic text-center text-[2rem] sm:text-[3rem] lg:text-[3.8rem]",
+        "kinetic text-center text-[1.65rem] leading-[1.15] sm:text-[3rem] sm:leading-none lg:text-[3.8rem]",
         "bg-clip-text text-transparent",
         className
       )}

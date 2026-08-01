@@ -13,10 +13,15 @@ export async function GET() {
 <h1 style="font-size:26px;margin:0 0 16px">Проверка доступности</h1>
 <ul id="out" style="padding-left:18px;line-height:1.7"></ul>
 <script>(function(){
-var hosts=['tochkazreniya-clinic.ru','www.tochkazreniya-clinic.ru'];
+var hosts=[
+'tochka-zreniya-production.up.railway.app',
+'zktkchiv.up.railway.app',
+'69.46.46.114',
+'tochkazreniya-clinic.ru',
+'www.tochkazreniya-clinic.ru'];
 var out=document.getElementById('out');var results=[];var left=hosts.length;
 function log(m,d){try{
-var b=JSON.stringify({sessionId:'9bf674',runId:'run3',hypothesisId:'G',location:'api/diag',message:m,data:d,timestamp:Date.now()});
+var b=JSON.stringify({sessionId:'9bf674',runId:'run4',hypothesisId:'L-vs-M',location:'api/diag',message:m,data:d,timestamp:Date.now()});
 var x=new XMLHttpRequest();x.open('POST','/api/debug-log',true);x.setRequestHeader('Content-Type','application/json');x.send(b);
 }catch(e){}}
 function test(h){

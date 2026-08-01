@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Check, Loader2, X } from "lucide-react";
+import { AlertTriangle, ArrowUpRight, Check, Loader2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { doctors, services } from "@/data/clinicData";
 import { useBooking, type BookingPrefill } from "./BookingProvider";
@@ -93,17 +93,27 @@ function BookingForm({
   const [doctorSlug, setDoctorSlug] = useState(prefill.doctorSlug ?? "");
   const [serviceCode, setServiceCode] = useState(prefill.serviceCode ?? "");
   const [date, setDate] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const selectedService = useMemo(
     () => services.find((s) => s.code === serviceCode),
     [serviceCode]
   );
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("loading");
-    window.setTimeout(() => setStatus("success"), 1100);
+    try {
+      const response = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, doctorSlug, serviceCode, date }),
+      });
+      if (!response.ok) throw new Error("request failed");
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
   }
 
   if (status === "success") {
@@ -133,6 +143,19 @@ function BookingForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {status === "error" && (
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-start gap-3 rounded-small border border-red-500/25 bg-red-500/10 px-4 py-3.5"
+        >
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" strokeWidth={1.8} />
+          <p className="text-[13px] leading-[1.5] text-silver">
+            Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам напрямую.
+          </p>
+        </motion.div>
+      )}
+
       <Field label="Врач — по желанию">
         <select
           value={doctorSlug}

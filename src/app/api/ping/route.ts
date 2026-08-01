@@ -24,7 +24,13 @@ x.send(b);
 </body></html>`;
 
   return new Response(html, {
-    headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store",
+      // lets the diagnostic page read the status across hosts, so a reachable
+      // host is distinguishable from one that merely refused the read
+      "access-control-allow-origin": "*",
+    },
   });
 }
 // #endregion

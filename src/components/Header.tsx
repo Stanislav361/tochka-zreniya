@@ -5,6 +5,7 @@ import { ArrowUpRight, Menu, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { contact, navLinks } from "@/data/clinicData";
 import { Logo } from "./Logo";
+import { PhonePicker } from "./PhonePicker";
 import { useBooking } from "./BookingProvider";
 import { cn } from "@/lib/utils";
 
@@ -56,20 +57,8 @@ export function Header() {
           </nav>
 
           <div className="relative z-10 flex h-full shrink-0 items-center justify-end gap-2 sm:gap-3">
-            <a
-              href={contact.phoneHref}
-              aria-label={`Позвонить ${contact.phone}`}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-small text-aqua transition-colors hover:bg-white/5 lg:hidden"
-            >
-              <Phone className="h-4 w-4" strokeWidth={1.75} />
-            </a>
-            <a
-              href={contact.phoneHref}
-              className="hidden h-10 items-center gap-2 leading-none text-[13px] tracking-[0.04em] text-silver transition-colors hover:text-platinum lg:inline-flex"
-            >
-              <Phone className="h-3.5 w-3.5 shrink-0 text-aqua" strokeWidth={1.75} />
-              <span className="whitespace-nowrap">{contact.phone}</span>
-            </a>
+            <PhonePicker variant="icon" className="lg:hidden" />
+            <PhonePicker variant="inline" className="hidden lg:block" />
             <button
               onClick={() => openBooking()}
               className="btn-aurora hidden h-10 items-center gap-2 px-5 font-medium md:inline-flex"
@@ -141,16 +130,21 @@ export function Header() {
                 ))}
               </nav>
 
-              <div className="safe-bottom mt-auto flex flex-col gap-4 border-t border-white/10 p-5 sm:p-6">
-                <a
-                  href={contact.phoneHref}
-                  className="inline-flex h-11 items-center gap-2 leading-none text-platinum"
-                >
-                  <Phone className="h-4 w-4 text-aqua" /> {contact.phone}
-                </a>
-                <p className="u-label-sm text-slate-deep">
-                  ПН–ПТ 8:00–20:00 · СБ 9:00–18:00
-                </p>
+              <div className="safe-bottom mt-auto flex flex-col gap-3 border-t border-white/10 p-5 sm:p-6">
+                {contact.phones.map((phone) => (
+                  <a
+                    key={phone.href}
+                    href={phone.href}
+                    className="inline-flex h-11 items-center gap-2 leading-none text-platinum"
+                  >
+                    <Phone className="h-4 w-4 text-aqua" />
+                    <span className="flex flex-col gap-0.5">
+                      <span className="u-label-sm text-slate-deep">{phone.label}</span>
+                      <span>{phone.display}</span>
+                    </span>
+                  </a>
+                ))}
+                <p className="u-label-sm text-slate-deep">{contact.hoursSummary}</p>
                 <button
                   onClick={() => {
                     setDrawerOpen(false);

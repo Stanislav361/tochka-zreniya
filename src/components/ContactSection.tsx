@@ -37,14 +37,20 @@ export function ContactSection() {
                 <div>
                   <div className="flex items-center gap-2.5">
                     <Phone className="h-4 w-4 text-aqua" strokeWidth={1.8} />
-                    <p className="u-label-sm text-slate-deep">Телефон</p>
+                    <p className="u-label-sm text-slate-deep">Телефоны</p>
                   </div>
-                  <a
-                    href={contact.phoneHref}
-                    className="mt-3 block text-[17px] text-platinum transition-colors hover:text-aqua"
-                  >
-                    {contact.phone}
-                  </a>
+                  <div className="mt-3 flex flex-col gap-2">
+                    {contact.phones.map((phone) => (
+                      <a
+                        key={phone.href}
+                        href={phone.href}
+                        className="block text-[17px] text-platinum transition-colors hover:text-aqua"
+                      >
+                        <span className="u-label-sm mr-2 text-slate-deep">{phone.label}</span>
+                        {phone.display}
+                      </a>
+                    ))}
+                  </div>
                 </div>
 
                 <div>

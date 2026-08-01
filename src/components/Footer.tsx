@@ -15,18 +15,26 @@ export function Footer() {
             на мир
           </h2>
 
-          <div className="flex flex-col items-start gap-5 lg:items-end">
+          <div className="flex flex-col items-start gap-4 lg:items-end">
             <p className="text-[20px] font-medium tracking-[-0.02em] text-platinum">
               Свяжитесь с нами
             </p>
-            <a
-              href={contact.phoneHref}
-              className="btn-aurora inline-flex min-h-12 w-full items-center justify-center gap-2 px-6 py-3.5 font-medium sm:w-auto"
-            >
-              {contact.phone}
-              <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
-            </a>
-            <p className="u-label-sm text-slate-deep lg:text-right">{contact.address}</p>
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:items-end">
+              {contact.phones.map((phone) => (
+                <a
+                  key={phone.href}
+                  href={phone.href}
+                  className="btn-aurora inline-flex min-h-12 w-full items-center justify-center gap-2 px-6 py-3.5 font-medium sm:w-auto"
+                >
+                  {phone.display}
+                  <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
+                </a>
+              ))}
+            </div>
+            <p className="u-label-sm max-w-sm text-slate-deep lg:text-right">
+              {contact.address}
+            </p>
+            <p className="u-label-sm text-slate-deep lg:text-right">{contact.hoursSummary}</p>
           </div>
         </div>
 

@@ -20,20 +20,28 @@ export const brand = {
 };
 
 export const contact = {
-  phone: "+7 (495) 123-45-67",
-  phoneHref: "tel:+74951234567",
-  whatsapp: "https://wa.me/74951234567",
-  telegram: "https://t.me/tochkazreniya",
-  address: "Московская область, г. Раменское, ул. Приборостроителей, д. 2",
-  addressShort: "г. Раменское, ул. Приборостроителей, 2",
-  hours: [
-    { days: "Пн — Пт", time: "8:00 — 20:00" },
-    { days: "Сб", time: "9:00 — 18:00" },
-    { days: "Вс", time: "9:00 — 15:00" },
+  phones: [
+    {
+      label: "Мобильный",
+      display: "+7 (917) 586-77-37",
+      href: "tel:+79175867737",
+    },
+    {
+      label: "Городской",
+      display: "+7 (495) 150-36-80",
+      href: "tel:+74951503680",
+    },
   ],
+  whatsapp: "https://wa.me/79175867737",
+  telegram: "https://t.me/tochkazreniya",
+  address:
+    "г. Мытищи, ул. Борисовка, д. 4 (вход с торца со стороны школы №31)",
+  addressShort: "г. Мытищи, ул. Борисовка, д. 4",
+  hours: [{ days: "Ежедневно", time: "10:00 — 20:00" }],
+  hoursSummary: "Ежедневно 10:00–20:00",
   mapEmbedUrl:
-    "https://yandex.ru/map-widget/v1/?ll=38.223%2C55.571&z=15&pt=38.223,55.571,pm2rdm",
-  yandexBusinessUrl: "https://yandex.ru/maps/org/tochka_zreniya/",
+    "https://yandex.ru/map-widget/v1/?ll=37.703685%2C55.909474&z=16&pt=37.703685,55.909474,pm2rdm&text=%D0%9C%D1%8B%D1%82%D0%B8%D1%89%D0%B8%2C%20%D1%83%D0%BB.%20%D0%91%D0%BE%D1%80%D0%B8%D1%81%D0%BE%D0%B2%D0%BA%D0%B0%2C%204",
+  yandexBusinessUrl: "https://yandex.ru/maps/?text=Мытищи%2C%20ул.%20Борисовка%2C%204",
   proDoctorovUrl: "https://prodoctorov.ru/",
   rating: {
     value: 5.0,

@@ -22,12 +22,14 @@ function CountUp({ value }: { value: string }) {
     if (!inView || Number.isNaN(target)) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finalValue = target.toFixed(decimals).replace(".", ",");
+    let frame = 0;
+
     if (reduceMotion) {
-      setDisplay(target.toFixed(decimals).replace(".", ","));
-      return;
+      frame = requestAnimationFrame(() => setDisplay(finalValue));
+      return () => cancelAnimationFrame(frame);
     }
 
-    let frame = 0;
     const start = performance.now();
     const duration = 1100;
 

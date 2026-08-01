@@ -4,14 +4,20 @@ import type { NextRequest } from "next/server";
 import { sinkPush } from "@/lib/debugSink";
 // #endregion
 
-const CANONICAL_HOST = "www.tochkazreniya-clinic.ru";
+/**
+ * The bare domain — not "www" — is canonical on purpose. The zone's
+ * authoritative servers answer the "www" name with rcode NXDOMAIN even though
+ * they do hand out its CNAME, so any resolver that honours the rcode (mobile
+ * carriers among them) decides the name does not exist. Those devices then
+ * cannot follow a redirect pointing at "www", which is what left phones on a
+ * blank screen. The bare name is a plain A record and resolves everywhere.
+ */
+const CANONICAL_HOST = "tochkazreniya-clinic.ru";
 
 /**
  * Sends every request that reaches this app on a non-canonical host
- * (bare "tochkazreniya-clinic.ru", any old Railway "*.up.railway.app"
- * URL, etc.) to the canonical https://www host. This only takes effect
- * once DNS for the bare domain actually points at this deployment —
- * see the DNS note below.
+ * (the "www" name, any old Railway "*.up.railway.app" URL, etc.) to the
+ * canonical https host.
  */
 export function proxy(request: NextRequest) {
   const host = request.headers.get("host");
@@ -40,7 +46,7 @@ export function proxy(request: NextRequest) {
   });
   // Diagnostic pages must answer on whatever host the device actually reached,
   // otherwise the redirect hides which hop is failing.
-  if (path === "/api/ping" || path === "/api/debug-log") {
+  if (path === "/api/ping" || path === "/api/debug-log" || path === "/api/diag") {
     return NextResponse.next();
   }
   // #endregion

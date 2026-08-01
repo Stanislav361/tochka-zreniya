@@ -35,7 +35,7 @@ export function Hero() {
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(70% 55% at 82% 88%, rgba(0,150,142,0.32) 0%, rgba(1,38,36,0) 60%)," +
+              "radial-gradient(70% 55% at 50% 72%, rgba(0,170,158,0.38) 0%, rgba(1,38,36,0) 58%)," +
               "radial-gradient(90% 60% at 15% 10%, rgba(1,20,19,0.95) 0%, rgba(1,38,36,0) 65%)",
           }}
         />
@@ -44,7 +44,7 @@ export function Hero() {
 
       <motion.div
         style={{ y: textY, opacity: textOpacity }}
-        className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-center px-5 text-center sm:px-6"
+        className="relative z-10 mx-auto flex w-full max-w-[1440px] shrink-0 flex-col items-center px-5 text-center sm:px-6"
       >
         <motion.p
           initial={{ opacity: 0, y: 12 }}
@@ -59,7 +59,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="display-tight mt-4 max-w-[18ch] text-balance text-[2rem] leading-[1.05] text-platinum sm:mt-6 sm:max-w-4xl sm:text-[3.4rem] sm:leading-none lg:text-[3.9rem]"
+          className="display-tight mt-3 max-w-[18ch] text-balance text-[1.85rem] leading-[1.05] text-platinum sm:mt-6 sm:max-w-4xl sm:text-[3.4rem] sm:leading-none lg:text-[3.9rem]"
         >
           Ясный взгляд на мир
           <br />
@@ -70,7 +70,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.4 }}
-          className="mt-5 max-w-xl text-[14px] leading-[1.55] text-silver sm:mt-7 sm:text-base sm:leading-[1.6]"
+          className="mt-4 max-w-xl text-[14px] leading-[1.55] text-silver sm:mt-7 sm:text-base sm:leading-[1.6]"
         >
           Высокоточная диагностика зрения, опытные офтальмологи и собственная оптика
           в медицинском центре «Точка Зрения».
@@ -80,7 +80,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.55 }}
-          className="mt-7 sm:mt-9"
+          className="mt-5 sm:mt-9"
         >
           <button
             onClick={() => openBooking()}
@@ -92,15 +92,17 @@ export function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* data orb */}
+      {/* data orb — on phones a dedicated stage between CTA and strip; desktop stays full-bleed */}
       <motion.div
         style={{ y: orbY, scale: orbScale }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.4, delay: 0.3 }}
-        className="pointer-events-none absolute inset-0 -z-0"
+        className="pointer-events-none relative z-[1] mt-2 w-full min-h-[42svh] flex-1 sm:absolute sm:inset-0 sm:z-0 sm:mt-0 sm:min-h-0 sm:flex-none"
       >
-        <ParticleSphere className="h-full w-full" />
+        <div className="absolute inset-0">
+          <ParticleSphere className="h-full w-full" glyphSize={6} />
+        </div>
       </motion.div>
 
       {/* instrument strip */}
@@ -108,7 +110,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.9 }}
-        className="relative z-10 mt-auto w-full border-t border-white/10 bg-abyss/55 backdrop-blur-sm"
+        className="relative z-10 mt-auto w-full shrink-0 border-t border-white/10 bg-abyss/55 backdrop-blur-sm"
       >
         <div className="mx-auto grid max-w-[1440px] divide-y divide-white/10 px-5 py-5 sm:grid-cols-3 sm:gap-8 sm:divide-y-0 sm:px-6 sm:py-6 lg:px-10">
           {heroStrip.map((item) => (

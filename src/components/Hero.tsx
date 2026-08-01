@@ -6,6 +6,9 @@ import { useEffect, useRef, useState } from "react";
 import { heroStrip } from "@/data/clinicData";
 import { ParticleSphere } from "./ParticleSphere";
 import { useBooking } from "./BookingProvider";
+// #region agent log
+import { debugLog } from "@/lib/debugLog";
+// #endregion
 
 /**
  * Only one hero planet should ever be mounted at a time. Rendering both the
@@ -33,6 +36,12 @@ export function Hero() {
   const { openBooking } = useBooking();
   const ref = useRef<HTMLElement>(null);
   const isDesktop = useIsDesktopViewport();
+
+  // #region agent log
+  useEffect(() => {
+    debugLog("hero-viewport-branch", { isDesktop, innerWidth: window.innerWidth }, "B");
+  }, [isDesktop]);
+  // #endregion
 
   const { scrollYProgress } = useScroll({
     target: ref,

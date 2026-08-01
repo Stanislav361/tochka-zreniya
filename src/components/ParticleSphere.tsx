@@ -2,6 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+// #region agent log
+import { debugLog } from "@/lib/debugLog";
+// #endregion
 
 /**
  * Bioluminescent data orb — a hollow shell of ~26k optotype glyphs that flies in
@@ -553,9 +556,23 @@ export function ParticleSphere({
     );
 
     const particles = buildParticles(n, full);
-    const renderer =
-      (glPipelineWorks() ? createGLRenderer(canvas, particles) : null) ??
-      create2DRenderer(canvas, particles);
+    // #region agent log
+    const glOk = glPipelineWorks();
+    const glRenderer = glOk ? createGLRenderer(canvas, particles) : null;
+    const renderer = glRenderer ?? create2DRenderer(canvas, particles);
+    debugLog(
+      "sphere-renderer",
+      {
+        framing,
+        points: n,
+        glPipeline: glOk,
+        mode: glRenderer ? "gl" : renderer ? "2d" : "none",
+        w: window.innerWidth,
+        dpr: window.devicePixelRatio,
+      },
+      "B"
+    );
+    // #endregion
     if (!renderer) return;
 
     let width = 0;
@@ -601,9 +618,20 @@ export function ParticleSphere({
     );
     intersectionObserver.observe(canvas);
 
+    // #region agent log
+    let framesLogged = false;
+    // #endregion
+
     const render = (now: number) => {
       frame = requestAnimationFrame(render);
       if (!visible || width === 0) return;
+
+      // #region agent log
+      if (!framesLogged) {
+        framesLogged = true;
+        debugLog("sphere-first-frame", { framing, width, height, dpr }, "B");
+      }
+      // #endregion
 
       const elapsed = (now - start) / 1000;
       const gather = reduceMotion ? 1 : Math.min(elapsed / (full ? 2.1 : 2.6), 1);

@@ -169,6 +169,7 @@ export const doctors: Doctor[] = [
     credentialsSummary:
       "ПИМУ, аспирантура МНТК «Микрохирургия глаза» им. Федорова, офтальмопластика, лазерное лечение сетчатки, факоэмульсификация катаракты.",
     initials: "НК",
+    photo: "/doctors/kostina-natalia.png",
   },
   {
     slug: "grigorieva-tatiana",
@@ -184,6 +185,7 @@ export const doctors: Doctor[] = [
     ],
     credentialsSummary: "Смоленская ГМА, ординатура РМАПО, «Всероссийская школа офтальмолога» им. Гельмгольца.",
     initials: "ТГ",
+    photo: "/doctors/grigorieva-tatiana.png",
   },
   {
     slug: "afanasieva-marina",
@@ -199,6 +201,7 @@ export const doctors: Doctor[] = [
     ],
     credentialsSummary: "ТулГУ, специализация в детской офтальмологии.",
     initials: "МА",
+    photo: "/doctors/afanasieva-marina.png",
   },
   {
     slug: "kosheleva-olga",
@@ -215,6 +218,7 @@ export const doctors: Doctor[] = [
     ],
     credentialsSummary: "ИвГМА, МОНИКИ, один из самых опытных специалистов клиники.",
     initials: "ОК",
+    photo: "/doctors/kosheleva-olga.png",
   },
   {
     slug: "myasina-marina",
@@ -230,6 +234,7 @@ export const doctors: Doctor[] = [
     ],
     credentialsSummary: "РНИМУ им. Н.И. Пирогова — диагностика и лечение заболеваний органов дыхания.",
     initials: "ММ",
+    photo: "/doctors/myasina-marina.png",
   },
   {
     slug: "fatalieva-valida",
@@ -245,6 +250,7 @@ export const doctors: Doctor[] = [
     ],
     credentialsSummary: "МОНИКИ им. М.Ф. Владимирского — ординатура по эндокринологии.",
     initials: "ВФ",
+    photo: "/doctors/fatalieva-valida.png",
   },
 ];
 

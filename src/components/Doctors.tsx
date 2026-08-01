@@ -49,7 +49,7 @@ function DoctorAvatar({ doctor, size = "md" }: { doctor: Doctor; size?: "md" | "
             if (event.currentTarget.naturalWidth > 0) setHasPhoto(true);
           }}
           className={cn(
-            "relative h-full w-full object-cover transition-opacity duration-700",
+            "relative h-full w-full object-cover object-top transition-opacity duration-700",
             hasPhoto ? "opacity-100" : "opacity-0"
           )}
         />

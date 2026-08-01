@@ -99,15 +99,15 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, delay: 0.35 }}
-        className="relative z-[1] mt-5 h-[min(52vw,320px)] min-h-[260px] w-full shrink-0 overflow-hidden px-1 sm:hidden"
+        className="relative z-[1] mt-5 h-[min(52vw,320px)] min-h-[260px] w-full shrink-0 sm:hidden"
       >
         <div className="absolute inset-0">
           <ParticleSphere
             className="h-full w-full"
             framing="full"
             halo="center"
-            glyphSize={7.5}
-            count={24000}
+            glyphSize={5}
+            count={16000}
           />
         </div>
       </motion.div>

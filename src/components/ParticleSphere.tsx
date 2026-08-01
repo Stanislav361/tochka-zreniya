@@ -19,17 +19,17 @@ import { cn } from "@/lib/utils";
 
 const GLYPHS = "0123456789ШБМНКЫИАЕВОСХ".split("");
 
-// brightness ramp: deep teal shell → luminous cyan-white highlights
-// floor is kept a notch brighter so the far limb still reads on small phones
+// brightness ramp: deep teal shell → soft aqua highlights
+// keep the top of the ramp off pure white so overlapping glyphs stay readable
 const RAMP: Array<[number, number, number]> = [
-  [18, 100, 94],
-  [28, 130, 122],
-  [42, 168, 156],
-  [78, 200, 188],
-  [140, 230, 220],
-  [198, 246, 240],
-  [230, 254, 250],
-  [248, 255, 254],
+  [10, 78, 74],
+  [18, 104, 98],
+  [30, 132, 124],
+  [48, 158, 148],
+  [72, 182, 170],
+  [104, 204, 192],
+  [138, 220, 208],
+  [172, 236, 224],
 ];
 
 // columns are padded past the glyph count so the atlas stays a power of two and
@@ -212,13 +212,13 @@ void main() {
   // deepest slice hides behind the near face, so it is dropped outright.
   // In flight that model doesn't apply — a glyph swinging behind the shell's
   // plane would blink out mid-air and pop back on arrival.
-  float shell = depth < 0.18 ? 0.0 : 0.22 + 0.78 * pow(depth, 1.05);
-  vAlpha = (shell * arrive + 0.4 * (1.0 - arrive)) * uIntro;
+  float shell = depth < 0.2 ? 0.0 : 0.18 + 0.7 * pow(depth, 1.25);
+  vAlpha = (shell * arrive + 0.26 * (1.0 - arrive)) * uIntro;
 
-  // brightness: depth + a touch of key light + per-particle variance, weighted
-  // to keep the mass teal with white only as sparse sparkle
-  float key = 0.5 + rx * 0.16 - ry * 0.22;
-  float lum = 0.14 + depth * 0.5 + key * 0.18 + aMeta.y * 0.24;
+  // brightness: depth + a touch of key light + per-particle variance —
+  // stay in the teal midtones so glyph shapes remain distinct
+  float key = 0.5 + rx * 0.14 - ry * 0.18;
+  float lum = 0.06 + depth * 0.4 + key * 0.12 + aMeta.y * 0.18;
   float row = clamp(floor(lum * float(${ATLAS_ROWS})), 0.0, float(${ATLAS_ROWS - 1}));
   vCell = vec2(aGlyph, row) * uCellSize;
 
@@ -369,10 +369,10 @@ function createGLRenderer(canvas: HTMLCanvasElement, p: Particles): Renderer | n
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, texture);
 
-  // premultiplied additive: glyph stacks along the limb brighten each other,
-  // and nothing has to be depth-sorted for the blend to be correct
+  // premultiplied alpha (not additive) — additive stacking blew the limb into
+  // a solid white disc and erased the glyph silhouettes
   gl.enable(gl.BLEND);
-  gl.blendFunc(gl.ONE, gl.ONE);
+  gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   gl.clearColor(0, 0, 0, 0);
 
   return {
@@ -476,11 +476,11 @@ function create2DRenderer(canvas: HTMLCanvasElement, p: Particles): Renderer | n
         projSize[k] = f.glyphSize * persp * p.meta[o + 2];
 
         const arrive = t * t;
-        const shell = depth < 0.18 ? 0 : 0.22 + 0.78 * Math.pow(depth, 1.05);
-        projAlpha[k] = (shell * arrive + 0.4 * (1 - arrive)) * f.intro;
+        const shell = depth < 0.2 ? 0 : 0.18 + 0.7 * Math.pow(depth, 1.25);
+        projAlpha[k] = (shell * arrive + 0.26 * (1 - arrive)) * f.intro;
 
-        const key = 0.5 + rx * 0.16 - ry * 0.22;
-        const lum = 0.14 + depth * 0.5 + key * 0.18 + p.meta[o + 1] * 0.24;
+        const key = 0.5 + rx * 0.14 - ry * 0.18;
+        const lum = 0.06 + depth * 0.4 + key * 0.12 + p.meta[o + 1] * 0.18;
         let row = (lum * ATLAS_ROWS) | 0;
         if (row < 0) row = 0;
         else if (row >= ATLAS_ROWS) row = ATLAS_ROWS - 1;
@@ -613,14 +613,13 @@ export function ParticleSphere({
       // the planet swells slightly as it consolidates
       const swell = 0.9 + easeOutCubic(gather) * 0.1;
       const mobile = width < 640;
-      // desktop dome parks the centre under the fold; on phones the stage is
-      // a short band between CTA and strip, so the planet is framed almost
-      // full-face and scaled to fill that band
+      // leave a soft margin on the full mobile stage so the shell never clips
+      // into a hard rectangular edge
       const radius =
         (full
-          ? Math.min(width, height) * (mobile ? 0.5 : 0.46)
+          ? Math.min(width, height) * (mobile ? 0.42 : 0.46)
           : mobile
-            ? Math.min(width, height) * 0.5
+            ? Math.min(width, height) * 0.48
             : Math.min(width * 0.42, height * 0.33)) * swell;
 
       renderer.draw({
@@ -635,7 +634,8 @@ export function ParticleSphere({
         cx: width * 0.5,
         cy: full ? height * 0.5 : mobile ? height * 0.56 : height * 0.98,
         fov: 3.1,
-        glyphSize: mobile ? glyphSize * 1.7 : glyphSize,
+        // oversized points on phones fused into a white blob
+        glyphSize: mobile ? glyphSize * 1.1 : glyphSize,
       });
     };
 
@@ -654,19 +654,23 @@ export function ParticleSphere({
       {halo !== "none" && (
         <div
           className={cn(
-            "animate-halo absolute",
+            "animate-halo pointer-events-none absolute rounded-full",
             halo === "offset"
-              ? "left-1/2 top-[42%] h-[55%] w-[92%] -translate-x-1/2 sm:left-auto sm:right-[6%] sm:top-[56%] sm:h-[40%] sm:w-[62%] sm:translate-x-0"
-              : "inset-0"
+              ? "left-1/2 top-[48%] h-[58%] w-[78%] -translate-x-1/2 sm:left-auto sm:right-[8%] sm:top-[58%] sm:h-[36%] sm:w-[54%] sm:translate-x-0"
+              : "left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2"
           )}
           style={{
             background:
-              "radial-gradient(circle, rgba(190,255,248,0.48) 0%, rgba(0,160,150,0.28) 40%, rgba(1,38,36,0) 72%)",
-            filter: "blur(40px)",
+              "radial-gradient(circle, rgba(0,160,150,0.22) 0%, rgba(0,120,112,0.1) 45%, rgba(1,38,36,0) 72%)",
+            filter: "blur(36px)",
           }}
         />
       )}
-      <canvas ref={canvasRef} className="relative h-full w-full" aria-hidden="true" />
+      <canvas
+        ref={canvasRef}
+        className="relative h-full w-full bg-transparent"
+        aria-hidden="true"
+      />
     </div>
   );
 }

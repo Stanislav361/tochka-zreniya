@@ -2,14 +2,37 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { heroStrip } from "@/data/clinicData";
 import { ParticleSphere } from "./ParticleSphere";
 import { useBooking } from "./BookingProvider";
 
+/**
+ * Only one hero planet should ever be mounted at a time. Rendering both the
+ * mobile and desktop ParticleSphere and hiding one with CSS still leaves two
+ * live WebGL contexts and animation loops running underneath — on weaker
+ * phones that's enough GPU/memory pressure to crash the tab and leave the
+ * page blank, since most of the site's content starts at opacity 0 and only
+ * ever becomes visible once its Framer Motion animation actually runs.
+ */
+function useIsDesktopViewport() {
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 640px)");
+    const update = () => setIsDesktop(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  return isDesktop;
+}
+
 export function Hero() {
   const { openBooking } = useBooking();
   const ref = useRef<HTMLElement>(null);
+  const isDesktop = useIsDesktopViewport();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -94,33 +117,38 @@ export function Hero() {
       {/*
         Mobile: planet sits in its own band ABOVE the three strip labels so
         nothing covers it. Desktop keeps the full-bleed dome behind the hero.
+        Only one of these ever mounts — see useIsDesktopViewport above.
       */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 0.35 }}
-        className="relative z-[1] mt-5 h-[min(52vw,320px)] min-h-[260px] w-full shrink-0 sm:hidden"
-      >
-        <div className="absolute inset-0">
-          <ParticleSphere
-            className="h-full w-full"
-            framing="full"
-            halo="center"
-            glyphSize={5}
-            count={16000}
-          />
-        </div>
-      </motion.div>
+      {isDesktop === false && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 0.35 }}
+          className="relative z-[1] mt-5 h-[min(52vw,320px)] min-h-[260px] w-full shrink-0"
+        >
+          <div className="absolute inset-0">
+            <ParticleSphere
+              className="h-full w-full"
+              framing="full"
+              halo="center"
+              glyphSize={5}
+              count={16000}
+            />
+          </div>
+        </motion.div>
+      )}
 
-      <motion.div
-        style={{ y: orbY, scale: orbScale }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.4, delay: 0.3 }}
-        className="pointer-events-none absolute inset-0 z-0 hidden sm:block"
-      >
-        <ParticleSphere className="h-full w-full" glyphSize={5.5} />
-      </motion.div>
+      {isDesktop === true && (
+        <motion.div
+          style={{ y: orbY, scale: orbScale }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.4, delay: 0.3 }}
+          className="pointer-events-none absolute inset-0 z-0"
+        >
+          <ParticleSphere className="h-full w-full" glyphSize={5.5} />
+        </motion.div>
+      )}
 
       {/* strip — always below the planet on phones, never over it */}
       <motion.div

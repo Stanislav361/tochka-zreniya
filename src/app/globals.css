@@ -1,0 +1,257 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surfaces — the Liquid teal stack */
+  --color-abyss: #012624;
+  --color-deep: #011d1c;
+  --color-kelp: #003734;
+  --color-kelp-soft: #0a4b46;
+
+  /* Text */
+  --color-platinum: #ffffff;
+  --color-mist: #edfffe;
+  --color-silver: #bbc7c6;
+  --color-ash: #f2f2f2;
+  --color-slate-deep: #707777;
+
+  /* Accent */
+  --color-phosphor: #fde9ff;
+  --color-biolum: #00827c;
+  --color-aqua: #cbfffc;
+
+  /* Type scale */
+  --text-caption: 10px;
+  --text-label: 12px;
+  --text-body: 16px;
+  --text-subheading: 24px;
+  --text-heading: 36px;
+  --text-heading-lg: 61px;
+  --text-display: 96px;
+
+  /* Radii — the complete shape vocabulary */
+  --radius-small: 6px;
+  --radius-cards: 16px;
+}
+
+:root {
+  --gradient-aurora: linear-gradient(
+    90deg,
+    rgb(203, 255, 252) 0%,
+    rgb(237, 255, 254) 26.25%,
+    rgb(255, 253, 250) 47.57%,
+    rgb(250, 209, 255) 88.96%
+  );
+  --gradient-biolum: linear-gradient(90deg, rgb(0, 130, 124) 0%, rgb(203, 255, 252) 100%);
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-abyss);
+}
+
+body {
+  background: var(--color-abyss);
+  color: var(--color-silver);
+  font-family: var(--font-matter), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-aqua);
+  color: #012624;
+}
+
+/* ---------- Signature type treatments ---------- */
+
+.u-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+}
+
+.u-label-sm {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.display-tight {
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.kinetic {
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.046em;
+}
+
+/* ---------- Aurora gradient CTA ---------- */
+
+.btn-aurora {
+  background: var(--gradient-aurora);
+  color: #131313;
+  border-radius: var(--radius-small);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    filter 0.4s ease,
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-aurora:hover {
+  filter: brightness(1.06) saturate(1.15);
+  transform: translateY(-1px);
+}
+
+.btn-biolum {
+  background: var(--gradient-biolum);
+  color: #012624;
+  border-radius: var(--radius-small);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    filter 0.4s ease,
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-biolum:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.text-aurora {
+  background: var(--gradient-aurora);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Atmosphere ---------- */
+
+/* Bioluminescent light pool that sits behind sections */
+.glow-pool {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(0, 190, 178, 0.5) 0%, rgba(1, 38, 36, 0) 70%);
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hairline separators in the teal stack */
+.hairline {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- Scrollbars ---------- */
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: #0a4b46;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-biolum);
+}
+
+/* ---------- Marquee ---------- */
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-x 38s linear infinite;
+}
+
+.animate-marquee-slow {
+  animation: marquee-x 70s linear infinite;
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* ---------- Ambient float / pulse ---------- */
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0);
+  }
+}
+
+.animate-drift {
+  animation: drift 9s ease-in-out infinite;
+}
+
+@keyframes halo {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+.animate-halo {
+  animation: halo 7s ease-in-out infinite;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .animate-marquee-slow,
+  .animate-drift,
+  .animate-halo {
+    animation: none;
+  }
+}

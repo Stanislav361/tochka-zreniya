@@ -1,33 +1,48 @@
 "use client";
 
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { statsBento } from "@/data/clinicData";
 import { AnimatedSection } from "./AnimatedSection";
 import { cn } from "@/lib/utils";
 
 function CountUp({ value }: { value: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  // positive rootMargin + low amount: on phones a -80px margin never hit the
+  // number at the bottom of a tall card, so counters stayed stuck at 0
+  const inView = useInView(ref, { once: true, amount: 0.15, margin: "120px 0px" });
 
   const decimals = value.includes(".") ? 1 : 0;
-  const target = parseFloat(value);
-
-  const raw = useMotionValue(0);
-  const spring = useSpring(raw, { stiffness: 60, damping: 18 });
-  const display = useTransform(spring, (latest) =>
-    latest.toFixed(decimals).replace(".", ",")
+  const target = Number.parseFloat(value);
+  const [display, setDisplay] = useState(() =>
+    (0).toFixed(decimals).replace(".", ",")
   );
 
   useEffect(() => {
-    if (inView) raw.set(target);
-  }, [inView, raw, target]);
+    if (!inView || Number.isNaN(target)) return;
 
-  return (
-    <span ref={ref}>
-      <motion.span>{display}</motion.span>
-    </span>
-  );
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      setDisplay(target.toFixed(decimals).replace(".", ","));
+      return;
+    }
+
+    let frame = 0;
+    const start = performance.now();
+    const duration = 1100;
+
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDisplay((target * eased).toFixed(decimals).replace(".", ","));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [inView, target, decimals]);
+
+  return <span ref={ref}>{display}</span>;
 }
 
 export function StatsBento() {
@@ -53,7 +68,7 @@ export function StatsBento() {
               key={stat.label}
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
+              viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className={cn(
                 "flex flex-col justify-between rounded-cards p-6 sm:p-9",

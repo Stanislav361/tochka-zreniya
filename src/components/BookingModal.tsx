@@ -92,7 +92,8 @@ function BookingForm({
   const [phone, setPhone] = useState("");
   const [doctorSlug, setDoctorSlug] = useState(prefill.doctorSlug ?? "");
   const [serviceCode, setServiceCode] = useState(prefill.serviceCode ?? "");
-  const [date, setDate] = useState("");
+  const [day, setDay] = useState("");
+  const [time, setTime] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const selectedService = useMemo(
@@ -100,16 +101,28 @@ function BookingForm({
     [serviceCode]
   );
 
-  // datetime-local expects "YYYY-MM-DDTHH:mm" in the user's local timezone.
-  const minDateTime = useMemo(() => {
+  // Native date/time inputs expect local "YYYY-MM-DD" / "HH:mm" values.
+  const minDay = useMemo(() => {
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    return now.toISOString().slice(0, 16);
+    return now.toISOString().slice(0, 10);
   }, []);
+
+  function openNativePicker(input: HTMLInputElement) {
+    if (typeof input.showPicker === "function") {
+      try {
+        input.showPicker();
+      } catch {
+        // Some browsers only allow showPicker after a trusted gesture
+        // with stricter conditions — falling back to the native control.
+      }
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("loading");
+    const date = day && time ? `${day}T${time}` : day || time;
     try {
       const response = await fetch("/api/booking", {
         method: "POST",
@@ -229,27 +242,29 @@ function BookingForm({
         />
       </Field>
 
-      <Field label="Желаемая дата и время">
-        <input
-          type="datetime-local"
-          value={date}
-          min={minDateTime}
-          step={300}
-          onChange={(e) => setDate(e.target.value)}
-          onClick={(e) => {
-            const input = e.currentTarget;
-            if (typeof input.showPicker === "function") {
-              try {
-                input.showPicker();
-              } catch {
-                // Some browsers only allow showPicker after a trusted gesture
-                // with stricter conditions — falling back to the native control.
-              }
-            }
-          }}
-          className={`${controlClasses} [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert`}
-        />
-      </Field>
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <Field label="Желаемая дата">
+          <input
+            type="date"
+            value={day}
+            min={minDay}
+            onChange={(e) => setDay(e.target.value)}
+            onClick={(e) => openNativePicker(e.currentTarget)}
+            className={pickerClasses}
+          />
+        </Field>
+
+        <Field label="Желаемое время">
+          <input
+            type="time"
+            value={time}
+            step={300}
+            onChange={(e) => setTime(e.target.value)}
+            onClick={(e) => openNativePicker(e.currentTarget)}
+            className={pickerClasses}
+          />
+        </Field>
+      </div>
 
       <button
         type="submit"
@@ -286,3 +301,6 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 const controlClasses =
   "w-full rounded-small border border-white/10 bg-white/[0.03] px-4 py-3.5 text-[16px] text-mist outline-none transition-colors placeholder:text-slate-deep focus:border-aqua/40 focus:bg-white/[0.06] sm:text-[14px] [&>option]:bg-deep [&>option]:text-mist";
+
+const pickerClasses =
+  `${controlClasses} [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert`;

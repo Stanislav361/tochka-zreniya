@@ -17,28 +17,41 @@ function asTrimmedString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
-/** Formats a datetime-local value ("YYYY-MM-DDTHH:mm") into a readable Russian string. */
+/** Formats a preferred slot ("YYYY-MM-DDTHH:mm", date-only, or time-only) for Telegram. */
 function formatPreferredSlot(value: string): string {
-  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value);
-  if (!match) return value;
+  const dateTime = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value);
+  if (dateTime) {
+    const [, year, month, day, hour, minute] = dateTime;
+    const date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute)
+    );
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleString("ru-RU", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
 
-  const [, year, month, day, hour, minute] = match;
-  const date = new Date(
-    Number(year),
-    Number(month) - 1,
-    Number(day),
-    Number(hour),
-    Number(minute)
-  );
-  if (Number.isNaN(date.getTime())) return value;
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (dateOnly) {
+    const [, year, month, day] = dateOnly;
+    const date = new Date(Number(year), Number(month) - 1, Number(day));
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString("ru-RU", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  }
 
-  return date.toLocaleString("ru-RU", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return value;
 }
 
 export async function POST(request: Request) {

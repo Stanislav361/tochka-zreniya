@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { doctors, services } from "@/data/clinicData";
 import { useBooking, type BookingPrefill } from "./BookingProvider";
 import { formatPrice } from "@/lib/utils";
+import { TimeWheel } from "./TimeWheel";
 
 export function BookingModal() {
   const { isOpen, prefill, closeBooking } = useBooking();
@@ -93,7 +94,7 @@ function BookingForm({
   const [doctorSlug, setDoctorSlug] = useState(prefill.doctorSlug ?? "");
   const [serviceCode, setServiceCode] = useState(prefill.serviceCode ?? "");
   const [day, setDay] = useState("");
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState("10:00");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const selectedService = useMemo(
@@ -250,32 +251,24 @@ function BookingForm({
         />
       </Field>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Field label="Желаемая дата">
-          <input
-            type="date"
-            value={day}
-            min={minDay}
-            onChange={(e) => setDay(e.target.value)}
-            onClick={(e) => openNativePicker(e.currentTarget)}
-            className={pickerClasses}
-          />
-        </Field>
+      <Field label="Желаемая дата">
+        <input
+          type="date"
+          value={day}
+          min={minDay}
+          onChange={(e) => setDay(e.target.value)}
+          onClick={(e) => openNativePicker(e.currentTarget)}
+          className={pickerClasses}
+        />
+      </Field>
 
-        <Field label="Желаемое время">
-          <select
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className={controlClasses}
-          >
-            <option value="">Выберите время</option>
-            {TIME_SLOTS.map((slot) => (
-              <option key={slot} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </select>
-        </Field>
+      <div className="flex flex-col gap-2.5">
+        <span className="u-label-sm text-slate-deep">Желаемое время</span>
+        <TimeWheel value={time} onChange={setTime} />
+        <p className="text-[12px] text-slate-deep">
+          Прокрутите барабаны — выбрано{" "}
+          <span className="text-mist">{time}</span>
+        </p>
       </div>
 
       <button
@@ -316,14 +309,6 @@ const controlClasses =
 
 const pickerClasses =
   `${controlClasses} [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert`;
-
-/** Clinic hours are 10:00–20:00; offer 30-minute slots through the last open hour. */
-const TIME_SLOTS = Array.from({ length: 21 }, (_, index) => {
-  const totalMinutes = 10 * 60 + index * 30;
-  const hours = String(Math.floor(totalMinutes / 60)).padStart(2, "0");
-  const minutes = String(totalMinutes % 60).padStart(2, "0");
-  return `${hours}:${minutes}`;
-});
 
 /** Forces Russian mobile format: +7 (999) 123-45-67 */
 function formatPhoneMask(value: string) {

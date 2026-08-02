@@ -17,6 +17,30 @@ function asTrimmedString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+/** Formats a datetime-local value ("YYYY-MM-DDTHH:mm") into a readable Russian string. */
+function formatPreferredSlot(value: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value);
+  if (!match) return value;
+
+  const [, year, month, day, hour, minute] = match;
+  const date = new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day),
+    Number(hour),
+    Number(minute)
+  );
+  if (Number.isNaN(date.getTime())) return value;
+
+  return date.toLocaleString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export async function POST(request: Request) {
   let body: BookingPayload;
   try {
@@ -43,7 +67,7 @@ export async function POST(request: Request) {
     `<b>Телефон:</b> ${escapeHtml(phone)}`,
     `<b>Врач:</b> ${doctor ? escapeHtml(doctor.name) : "Любой свободный специалист"}`,
     `<b>Услуга:</b> ${service ? escapeHtml(`${service.code} · ${service.name}`) : "Не выбрана"}`,
-    `<b>Желаемая дата/время:</b> ${date ? escapeHtml(date) : "Не указано"}`,
+    `<b>Желаемая дата/время:</b> ${date ? escapeHtml(formatPreferredSlot(date)) : "Не указано"}`,
   ];
 
   const token = process.env.TELEGRAM_BOT_TOKEN;

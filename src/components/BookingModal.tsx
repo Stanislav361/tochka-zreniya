@@ -100,6 +100,13 @@ function BookingForm({
     [serviceCode]
   );
 
+  // datetime-local expects "YYYY-MM-DDTHH:mm" in the user's local timezone.
+  const minDateTime = useMemo(() => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    return now.toISOString().slice(0, 16);
+  }, []);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("loading");
@@ -224,10 +231,23 @@ function BookingForm({
 
       <Field label="Желаемая дата и время">
         <input
+          type="datetime-local"
           value={date}
+          min={minDateTime}
+          step={300}
           onChange={(e) => setDate(e.target.value)}
-          placeholder="Например, завтра после 15:00"
-          className={controlClasses}
+          onClick={(e) => {
+            const input = e.currentTarget;
+            if (typeof input.showPicker === "function") {
+              try {
+                input.showPicker();
+              } catch {
+                // Some browsers only allow showPicker after a trusted gesture
+                // with stricter conditions — falling back to the native control.
+              }
+            }
+          }}
+          className={`${controlClasses} [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert`}
         />
       </Field>
 

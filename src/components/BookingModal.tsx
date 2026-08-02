@@ -234,9 +234,17 @@ function BookingForm({
       <Field label="Телефон">
         <input
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => setPhone(formatPhoneMask(e.target.value))}
+          onFocus={() => {
+            if (!phone) setPhone("+7 (");
+          }}
           type="tel"
+          inputMode="numeric"
+          autoComplete="tel"
           placeholder="+7 (___) ___-__-__"
+          pattern="\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}"
+          title="Введите номер в формате +7 (999) 123-45-67"
+          maxLength={18}
           className={controlClasses}
           required
         />
@@ -255,14 +263,18 @@ function BookingForm({
         </Field>
 
         <Field label="Желаемое время">
-          <input
-            type="time"
+          <select
             value={time}
-            step={300}
             onChange={(e) => setTime(e.target.value)}
-            onClick={(e) => openNativePicker(e.currentTarget)}
-            className={pickerClasses}
-          />
+            className={controlClasses}
+          >
+            <option value="">Выберите время</option>
+            {TIME_SLOTS.map((slot) => (
+              <option key={slot} value={slot}>
+                {slot}
+              </option>
+            ))}
+          </select>
         </Field>
       </div>
 
@@ -304,3 +316,34 @@ const controlClasses =
 
 const pickerClasses =
   `${controlClasses} [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert`;
+
+/** Clinic hours are 10:00–20:00; offer 30-minute slots through the last open hour. */
+const TIME_SLOTS = Array.from({ length: 21 }, (_, index) => {
+  const totalMinutes = 10 * 60 + index * 30;
+  const hours = String(Math.floor(totalMinutes / 60)).padStart(2, "0");
+  const minutes = String(totalMinutes % 60).padStart(2, "0");
+  return `${hours}:${minutes}`;
+});
+
+/** Forces Russian mobile format: +7 (999) 123-45-67 */
+function formatPhoneMask(value: string) {
+  let digits = value.replace(/\D/g, "");
+
+  if (digits.startsWith("8")) digits = `7${digits.slice(1)}`;
+  if (!digits.startsWith("7")) digits = `7${digits}`;
+  digits = digits.slice(0, 11);
+
+  const local = digits.slice(1);
+  let formatted = "+7";
+  if (local.length === 0) return formatted;
+
+  formatted += ` (${local.slice(0, 3)}`;
+  if (local.length < 3) return formatted;
+  formatted += ")";
+
+  if (local.length > 3) formatted += ` ${local.slice(3, 6)}`;
+  if (local.length > 6) formatted += `-${local.slice(6, 8)}`;
+  if (local.length > 8) formatted += `-${local.slice(8, 10)}`;
+
+  return formatted;
+}

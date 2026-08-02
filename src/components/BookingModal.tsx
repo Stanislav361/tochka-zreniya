@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertTriangle, ArrowUpRight, Check, Loader2, X } from "lucide-react";
+import { AlertTriangle, ArrowUpRight, Check, ChevronDown, Clock3, Loader2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { doctors, services } from "@/data/clinicData";
 import { useBooking, type BookingPrefill } from "./BookingProvider";
@@ -94,8 +94,32 @@ function BookingForm({
   const [doctorSlug, setDoctorSlug] = useState(prefill.doctorSlug ?? "");
   const [serviceCode, setServiceCode] = useState(prefill.serviceCode ?? "");
   const [day, setDay] = useState("");
-  const [time, setTime] = useState("10:00");
+  const [time, setTime] = useState("");
+  const [timeOpen, setTimeOpen] = useState(false);
+  const [draftTime, setDraftTime] = useState("10:00");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  function openTimePicker() {
+    setDraftTime(time || "10:00");
+    setTimeOpen(true);
+  }
+
+  function confirmTime() {
+    setTime(draftTime);
+    setTimeOpen(false);
+  }
+
+  useEffect(() => {
+    if (!timeOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        setTimeOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onKey, true);
+    return () => document.removeEventListener("keydown", onKey, true);
+  }, [timeOpen]);
 
   const selectedService = useMemo(
     () => services.find((s) => s.code === serviceCode),
@@ -264,12 +288,72 @@ function BookingForm({
 
       <div className="flex flex-col gap-2.5">
         <span className="u-label-sm text-slate-deep">Желаемое время</span>
-        <TimeWheel value={time} onChange={setTime} />
-        <p className="text-[12px] text-slate-deep">
-          Прокрутите барабаны — выбрано{" "}
-          <span className="text-mist">{time}</span>
-        </p>
+        <button
+          type="button"
+          onClick={openTimePicker}
+          className={`${controlClasses} flex items-center justify-between text-left`}
+        >
+          <span className={time ? "text-mist" : "text-slate-deep"}>
+            {time || "Выберите время"}
+          </span>
+          <span className="flex items-center gap-2 text-slate-deep">
+            <Clock3 className="h-4 w-4" strokeWidth={1.8} />
+            <ChevronDown className="h-4 w-4" strokeWidth={1.8} />
+          </span>
+        </button>
       </div>
+
+      <AnimatePresence>
+        {timeOpen && (
+          <motion.div
+            className="fixed inset-0 z-[140] flex items-end justify-center sm:items-center sm:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <button
+              type="button"
+              aria-label="Закрыть выбор времени"
+              className="absolute inset-0 bg-abyss/70 backdrop-blur-sm"
+              onClick={() => setTimeOpen(false)}
+            />
+            <motion.div
+              role="dialog"
+              aria-label="Выбор времени"
+              className="safe-bottom relative w-full rounded-t-cards border border-white/10 bg-deep p-5 sm:max-w-sm sm:rounded-cards sm:p-6"
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 24, opacity: 0 }}
+              transition={{ type: "spring", damping: 28, stiffness: 320 }}
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <p className="u-label-sm text-aqua">Время приёма</p>
+                  <p className="mt-1 text-[1.15rem] font-medium text-platinum">{draftTime}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setTimeOpen(false)}
+                  aria-label="Закрыть"
+                  className="flex h-9 w-9 items-center justify-center rounded-small text-slate-deep transition-colors hover:bg-white/5 hover:text-mist"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <TimeWheel value={draftTime} onChange={setDraftTime} />
+
+              <button
+                type="button"
+                onClick={confirmTime}
+                className="btn-aurora mt-5 w-full py-3.5 font-medium"
+              >
+                Выбрать {draftTime}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <button
         type="submit"

@@ -1,13 +1,18 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Menu, Phone, X } from "lucide-react";
+import { ArrowUpRight, Menu, MessageCircle, Phone, Send, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { contact, navLinks } from "@/data/clinicData";
 import { Logo } from "./Logo";
 import { PhonePicker } from "./PhonePicker";
 import { useBooking } from "./BookingProvider";
 import { cn } from "@/lib/utils";
+
+const messengerLinks = [
+  { name: "WhatsApp", href: contact.whatsapp, Icon: MessageCircle },
+  { name: "Telegram", href: contact.telegram, Icon: Send },
+] as const;
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -56,7 +61,22 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="relative z-10 flex h-full shrink-0 items-center justify-end gap-2 sm:gap-3">
+          <div className="relative z-10 flex h-full shrink-0 items-center justify-end gap-1.5 sm:gap-2.5">
+            <div className="flex items-center gap-0.5 sm:gap-1">
+              {messengerLinks.map(({ name, href, Icon }) => (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={name}
+                  title={name}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-small text-silver transition-colors hover:bg-white/5 hover:text-aqua"
+                >
+                  <Icon className="h-4 w-4" strokeWidth={1.8} />
+                </a>
+              ))}
+            </div>
             <PhonePicker variant="icon" className="lg:hidden" />
             <PhonePicker variant="inline" className="hidden lg:block" />
             <button
@@ -144,6 +164,20 @@ export function Header() {
                     </span>
                   </a>
                 ))}
+                <div className="flex flex-wrap gap-2">
+                  {messengerLinks.map(({ name, href, Icon }) => (
+                    <a
+                      key={name}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-small border border-white/15 px-4 py-2.5 text-[12px] uppercase tracking-[0.08em] text-silver transition-colors duration-500 hover:border-aqua/40 hover:text-aqua"
+                    >
+                      <Icon className="h-4 w-4" strokeWidth={1.8} />
+                      {name}
+                    </a>
+                  ))}
+                </div>
                 <p className="u-label-sm text-slate-deep">{contact.hoursSummary}</p>
                 <button
                   onClick={() => {
